@@ -6,8 +6,8 @@ from multiprocessing import Queue
 from itertools import accumulate
 
 # we are looking for prime numbers in this interval
-lower_bound = 1000000000000
-upper_bound = 1000000000100
+lower_bound = 1739834324567
+upper_bound = 1739834324667 
 
 P = [1, 2, 3, 4, 8, 10, 20]
 

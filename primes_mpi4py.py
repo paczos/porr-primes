@@ -10,8 +10,8 @@ size = comm.Get_size()
 rank = comm.Get_rank()
 
 # we are looking for prime numbers in this interval
-lower_bound = 1739834324567
-upper_bound = 1739834324667 
+lower_bound = 1000000000000
+upper_bound = 1000000000100
 
 # tested function returning number of factors of n
 def number_of_factors(n):
