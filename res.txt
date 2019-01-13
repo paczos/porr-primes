@@ -1,9 +1,25 @@
-nat@nat:~/cuda/porr_primes$ python3 primes_mpi4py.py 
-[1000000000039, 1000000000061, 1000000000063, 1000000000091]
-time:  10.747434096000006
+nat@nat:~/cuda/porr_primes$ ./mpi_run.sh
+RUNNING: mpiexec -n 1 python3 primes_mpi4py.py
+[1739834324573, 1739834324603, 1739834324659]
+time:  14.000659875000565
+RUNNING: mpiexec -n 2 python3 primes_mpi4py.py
+[1739834324573, 1739834324603, 1739834324659]
+time:  7.045371350000096
+RUNNING: mpiexec -n 4 python3 primes_mpi4py.py
+[1739834324573, 1739834324603, 1739834324659]
+time:  3.6264846599997327
+RUNNING: mpiexec -n 8 python3 primes_mpi4py.py
+[1739834324573, 1739834324603, 1739834324659]
+time:  2.6273460289994546
+RUNNING: mpiexec -n 10 python3 primes_mpi4py.py
+[1739834324573, 1739834324603, 1739834324659]
+time:  2.5313349449997986
+RUNNING: mpiexec -n 20 python3 primes_mpi4py.py
+[1739834324573, 1739834324603, 1739834324659]
+time:  2.2627854799993656
 
 
-nat@nat:~/cuda/porr_primes$ python3 primes_multiprocessing.py 
+nat@nat:~/cuda/porr_primes$ python3 primes_multiprocessing.py
 processes:  1 intervals:  [0, 100]
 time:  13.886505038999985
 [1739834324573, 1739834324603, 1739834324659]
@@ -26,3 +42,8 @@ processes:  20 intervals:  [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65
 time:  2.7295110889999705
 [1739834324573, 1739834324603, 1739834324659]
 
+
+
+GPU operations took  0.0011563301086425781 seconds
+ [1739834324603 1739834324573 1739834324659]
+total time:  2.063532829284668 seconds

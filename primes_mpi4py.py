@@ -10,8 +10,8 @@ size = comm.Get_size()
 rank = comm.Get_rank()
 
 # we are looking for prime numbers in this interval
-lower_bound = 1000000000000
-upper_bound = 1000000000100
+lower_bound = 1739834324567
+upper_bound = 1739834324667
 
 # tested function returning number of factors of n
 def number_of_factors(n):
@@ -28,7 +28,7 @@ def check_numbers_in_interval(lower, upper):
         if number_of_factors(number) == 0:
             out.append(number)
     return out
-    
+
 
 def prepare_intervals(lower, upper, p):
     samples = upper - lower
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     if rank == 0:
         start = time.perf_counter()
         intervals = prepare_intervals(lower_bound, upper_bound, size)
-    
+
     # the data is a tuple (lower, upper)
     lower, upper = comm.scatter(intervals, root=0)
     data = check_numbers_in_interval(lower_bound + lower, lower_bound + upper)

@@ -7,29 +7,28 @@ from pycuda.compiler import SourceModule
 
 import time
 
-import numpy as np
+import numpy
 whole_program = time.time()
 
 
-lower_bound = 1
-upper_bound = 2050
+lower_bound = 1739834324567
+upper_bound = 1739834324667
 diff = upper_bound - lower_bound
 d = diff
-d = np.int32(d)
+d = numpy.int32(d)
 
 nums = list(range (lower_bound, upper_bound))
-numki = np.asarray(nums)
-numki = numki.astype(np.int32)
-res = np.zeros(diff)
-res = res.astype(np.int64)
+nums = numpy.asarray(nums)
+nums = nums.astype(numpy.int64)
+res = numpy.zeros(diff)
+res = res.astype(numpy.int64)
 
-
-nums_gpu = cuda.mem_alloc(numki.nbytes)
+nums_gpu = cuda.mem_alloc(nums.nbytes)
 res_gpu = cuda.mem_alloc(res.nbytes)
 
 # arr_gpu = cuda.mem_alloc(arr.nbytes)
 
-cuda.memcpy_htod(nums_gpu, numki)
+cuda.memcpy_htod(nums_gpu, nums)
 cuda.memcpy_htod(res_gpu, res)
 
 
@@ -38,8 +37,7 @@ mod = SourceModule("""
   {
     long long int idx = threadIdx.x;
     if(idx == 0) {
-            printf(" ");
-
+            printf(" " );
     }
     long long int j = 0;
     long long int i = 0;
@@ -63,37 +61,25 @@ mod = SourceModule("""
     }
 
 
-  }
-  __global__ void test (int *a)
-  {
-    int idx = threadIdx.x+ blockIdx.x * blockDim.x;
 
-    printf("  %d   ", a[idx]);
-   }
+  }
   """)
 
-func = mod.get_function("test")
+func = mod.get_function("primify")
+
 start = time.time()
-#
-# bdim = (16, 16, 1)
-# dx, mx = divmod(cols, bdim[0])
-# dy, my = divmod(rows, bdim[1])
-#
-# gdim = ( (dx + (mx>0)) * bdim[0], (dy + (my>0)) * bdim[1]) )
-
-
-func( nums_gpu, block=(1024,1,1), grid=(2,1))
+func( nums_gpu,res_gpu, d, block=(diff,1,1))
 gpu_time = time.time() - start
-print ("GPU operations took  % seconds" % gpu_time)
-res_fromgpu = np.empty_like(res)
+print ("GPU operations took  % s seconds" % gpu_time)
+res_fromgpu = numpy.empty_like(res)
 #
 cuda.memcpy_dtoh(res_fromgpu, res_gpu)
-# for x in range(0,diff):
-#     if res_fromgpu[x] == 0:
-#         res_fromgpu = res_fromgpu[0:x]
-#         break
-#
-# print (res_fromgpu)
+for x in range(0,diff):
+    if res_fromgpu[x] == 0:
+        res_fromgpu = res_fromgpu[0:x]
+        break
+
+print (res_fromgpu)
 program_time = time.time() - whole_program
 
-print ("total time:  % seconds" % program_time)
+print ("total time:  % s seconds" % program_time)
