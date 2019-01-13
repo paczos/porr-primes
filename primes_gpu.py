@@ -14,8 +14,7 @@ whole_program = time.time()
 lower_bound = 1739834324567
 upper_bound = 1739834324667
 diff = upper_bound - lower_bound
-d = diff
-d = numpy.int32(d)
+
 
 nums = list(range (lower_bound, upper_bound))
 nums = numpy.asarray(nums)
@@ -33,7 +32,7 @@ cuda.memcpy_htod(res_gpu, res)
 
 
 mod = SourceModule("""
-  __global__ void primify (long long int *a, long long int *res, int *diff)
+  __global__ void primify (long long int *a, long long int *res)
   {
     long long int idx = threadIdx.x;
     if(idx == 0) {
@@ -68,7 +67,7 @@ mod = SourceModule("""
 func = mod.get_function("primify")
 
 start = time.time()
-func( nums_gpu,res_gpu, d, block=(diff,1,1))
+func( nums_gpu,res_gpu, block=(diff,1,1))
 gpu_time = time.time() - start
 print ("GPU operations took  % s seconds" % gpu_time)
 res_fromgpu = numpy.empty_like(res)
